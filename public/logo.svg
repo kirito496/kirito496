@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="50" fill="#14459c"/>
+  <circle cx="50" cy="50" r="41" fill="#edeae3"/>
+  <g fill="#8fa9cf">
+    <circle cx="41.5" cy="31" r="9.5"/>
+    <rect x="39.3" y="19.5" width="4.4" height="5"/>
+    <rect x="39.3" y="37.5" width="4.4" height="5"/>
+    <rect x="29.8" y="28.8" width="5" height="4.4"/>
+    <rect x="47.8" y="28.8" width="5" height="4.4"/>
+  </g>
+  <circle cx="41.5" cy="31" r="4.3" fill="#14459c"/>
+  <g fill="none" stroke="#14459c" stroke-width="1.4">
+    <path d="M52 27 h7 v-5"/>
+    <path d="M52 33 h10"/>
+    <path d="M52 39 h7 v6"/>
+  </g>
+  <g fill="#14459c">
+    <circle cx="59" cy="21.5" r="2.1"/><circle cx="63.2" cy="33" r="2.1"/><circle cx="59.4" cy="45.4" r="2.1"/>
+  </g>
+  <text x="50" y="70" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="34" font-weight="700" fill="#17161a" letter-spacing="1">NL</text>
+  <text x="50" y="82" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="8" letter-spacing="3" fill="#17161a">NOVA LAB</text>
+</svg>

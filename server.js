@@ -66,11 +66,66 @@ app.get('/api/messages', async (req, res) => {
   res.json(rows);
 });
 
-app.get('/api/health', (req, res) => res.json({ ok: true, db: Boolean(pool) }));
+// Assistant IA — répond aux visiteurs à propos de Nova Lab.
+// Utilise l'API Claude si ANTHROPIC_API_KEY est défini (sinon repli hors-ligne).
+const SYSTEM_PROMPT = `Tu es l'assistant virtuel de Nova Lab, une agence d'ingénierie et de communication.
+Slogan : « Avec nous, l'innovation prend vie ».
+Domaines d'expertise : Réseaux & infrastructure, Cybersécurité, Supervision & maintenance,
+Développement web & mobile, Intégration DevSecOps, Community management & contenu,
+Marketing d'acquisition, Identité visuelle & design.
+Contact : email josechanceux560@gmail.com, téléphone +229 91 28 71 11, Instagram @labnova48.
+Réponds en français, de façon professionnelle, chaleureuse et concise (2 à 4 phrases).
+Aide le visiteur à cerner son besoin et invite-le à laisser un message via le formulaire de contact
+ou à écrire à l'email pour un devis. N'invente jamais de tarifs précis ni de délais fermes.`;
+
+app.post('/api/chat', async (req, res) => {
+  const messages = Array.isArray(req.body?.messages) ? req.body.messages.slice(-12) : [];
+  if(!messages.length) return res.status(400).json({ error: 'Message vide.' });
+
+  if(!process.env.ANTHROPIC_API_KEY){
+    return res.json({
+      reply: "L'assistant IA n'est pas encore activé. En attendant, écrivez-nous à josechanceux560@gmail.com " +
+             "ou au +229 91 28 71 11, ou laissez un message via le formulaire de contact — nous répondons sous 48 h."
+    });
+  }
+  try{
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: process.env.AI_MODEL || 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        system: SYSTEM_PROMPT,
+        messages: messages.map(m => ({
+          role: m.role === 'assistant' ? 'assistant' : 'user',
+          content: String(m.content || '').slice(0, 2000)
+        }))
+      })
+    });
+    const data = await r.json();
+    if(!r.ok){
+      console.error('Erreur API IA :', data);
+      return res.status(502).json({ error: 'Service IA indisponible.' });
+    }
+    const reply = (data.content || []).map(b => b.text || '').join('').trim();
+    res.json({ reply: reply || "Désolé, je n'ai pas de réponse. Contactez-nous à josechanceux560@gmail.com." });
+  }catch(err){
+    console.error('Erreur IA :', err);
+    res.status(500).json({ error: 'Erreur serveur.' });
+  }
+});
+
+app.get('/api/health', (req, res) => res.json({
+  ok: true, db: Boolean(pool), ai: Boolean(process.env.ANTHROPIC_API_KEY)
+}));
 
 const port = process.env.PORT || 3000;
 initDb()
   .catch(err => console.error('Initialisation de la base échouée :', err))
   .finally(() => {
-    app.listen(port, () => console.log(`NOVA 360 en ligne sur le port ${port} (base : ${pool ? 'PostgreSQL' : 'aucune'})`));
+    app.listen(port, () => console.log(`NOVA LAB en ligne sur le port ${port} (base : ${pool ? 'PostgreSQL' : 'aucune'}, IA : ${process.env.ANTHROPIC_API_KEY ? 'active' : 'inactive'})`));
   });
