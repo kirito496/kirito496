@@ -44,6 +44,18 @@ const pool = process.env.DATABASE_URL
     })
   : null;
 
+// Envoi d'email : actif si EMAIL_USER + EMAIL_PASS sont configurés (Gmail).
+// À chaque message reçu, une notification part vers EMAIL_TO (ta boîte).
+let mailer = null;
+if(process.env.EMAIL_USER && process.env.EMAIL_PASS){
+  const nodemailer = require('nodemailer');
+  mailer = nodemailer.createTransport({
+    service: 'gmail',
+    auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+  });
+}
+const MAIL_TO = process.env.EMAIL_TO || 'labnova48@gmail.com';
+
 async function initDb(){
   if(!pool) return;
   await pool.query(`
@@ -60,19 +72,38 @@ async function initDb(){
 
 // Réception du formulaire de contact
 app.post('/api/contact', async (req, res) => {
-  const { name, email, need, message } = req.body || {};
+  const { name, email, need, message, website } = req.body || {};
+  // Anti-spam : "website" est un champ piège invisible. Un robot le remplit, pas un humain.
+  if(website){ return res.json({ ok: true }); }
   if(!name || !email){
     return res.status(400).json({ error: 'Le nom et l\'email sont requis.' });
   }
+  const clean = {
+    name: String(name).slice(0, 200),
+    email: String(email).slice(0, 200),
+    need: String(need || '').slice(0, 200),
+    message: String(message || '').slice(0, 5000)
+  };
   try{
     if(pool){
       await pool.query(
         'INSERT INTO messages(name, email, need, message) VALUES($1, $2, $3, $4)',
-        [String(name).slice(0, 200), String(email).slice(0, 200),
-         String(need || '').slice(0, 200), String(message || '').slice(0, 5000)]
+        [clean.name, clean.email, clean.need, clean.message]
       );
     }else{
-      console.log('Message reçu (aucune base configurée) :', { name, email, need, message });
+      console.log('Message reçu (aucune base configurée) :', clean);
+    }
+    // Notification email (ne bloque pas la réponse au visiteur si l'envoi échoue)
+    if(mailer){
+      mailer.sendMail({
+        from: `"Nova Lab — Site" <${process.env.EMAIL_USER}>`,
+        to: MAIL_TO,
+        replyTo: clean.email,                       // répondre = répondre au client
+        subject: `Nouveau projet — ${clean.need || 'Contact'} (${clean.name})`,
+        text: `Nouveau message depuis le site Nova Lab\n\n`
+            + `Nom : ${clean.name}\nEmail : ${clean.email}\nBesoin : ${clean.need || '-'}\n\n`
+            + `Message :\n${clean.message || '-'}`
+      }).catch(err => console.error('Envoi email échoué :', err));
     }
     res.json({ ok: true });
   }catch(err){
@@ -148,12 +179,12 @@ app.post('/api/chat', async (req, res) => {
 });
 
 app.get('/api/health', (req, res) => res.json({
-  ok: true, db: Boolean(pool), ai: Boolean(process.env.ANTHROPIC_API_KEY)
+  ok: true, db: Boolean(pool), ai: Boolean(process.env.ANTHROPIC_API_KEY), mail: Boolean(mailer)
 }));
 
 const port = process.env.PORT || 3000;
 initDb()
   .catch(err => console.error('Initialisation de la base échouée :', err))
   .finally(() => {
-    app.listen(port, () => console.log(`NOVA LAB en ligne sur le port ${port} (base : ${pool ? 'PostgreSQL' : 'aucune'}, IA : ${process.env.ANTHROPIC_API_KEY ? 'active' : 'inactive'})`));
+    app.listen(port, () => console.log(`NOVA LAB en ligne sur le port ${port} (base : ${pool ? 'PostgreSQL' : 'aucune'}, IA : ${process.env.ANTHROPIC_API_KEY ? 'active' : 'inactive'}, email : ${mailer ? 'actif' : 'inactif'})`));
   });
