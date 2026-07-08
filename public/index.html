@@ -237,10 +237,18 @@
   }
   .case .visual::after{
     content:attr(data-tag);
-    position:absolute;top:14px;left:14px;
+    position:absolute;top:14px;left:14px;z-index:3;
     background:rgba(255,255,255,.9);color:var(--ink);
     font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
     padding:6px 12px;border-radius:var(--radius-pill);
+  }
+  /* photo réelle (si le fichier existe dans /images) — sinon repli sur l'illustration */
+  .case .visual .photo{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;
+  }
+  .case .visual .photo + .veil{
+    position:absolute;inset:0;z-index:2;
+    background:linear-gradient(180deg,rgba(4,7,20,.12),rgba(4,7,20,.42));
   }
   .v-a{background:linear-gradient(160deg,#1d2440,#3b2c63 55%,#b0501c)}
   .v-b{background:linear-gradient(200deg,#e8871e,#b0501c 60%,#5a2a14)}
@@ -683,6 +691,7 @@
     <div class="work-grid">
       <article class="case reveal">
         <div class="visual v-a" data-tag="Réseau">
+          <img class="photo" src="/images/reseau.jpg" alt="Infrastructure réseau" onerror="this.remove()"><span class="veil"></span>
           <svg class="art" viewBox="0 0 100 100" role="img" aria-label="Schéma réseau">
             <path class="line" d="M50 50 L24 26 M50 50 L76 26 M50 50 L24 74 M50 50 L76 74"/>
             <rect class="fill" x="40" y="40" width="20" height="20" rx="4"/>
@@ -697,6 +706,7 @@
       </article>
       <article class="case reveal">
         <div class="visual v-b" data-tag="Sécurité">
+          <img class="photo" src="/images/securite.jpg" alt="Cybersécurité" onerror="this.remove()"><span class="veil"></span>
           <svg class="art" viewBox="0 0 100 100" role="img" aria-label="Bouclier de sécurité">
             <path class="fill" d="M50 16 L78 27 V50 C78 68 66 80 50 86 C34 80 22 68 22 50 V27 Z"/>
             <path d="M50 46 m-7 0 a7 7 0 1 1 14 0 a7 7 0 1 1 -14 0" fill="none" stroke="#14459c" stroke-width="4"/>
@@ -708,6 +718,7 @@
       </article>
       <article class="case reveal">
         <div class="visual v-c" data-tag="Application">
+          <img class="photo" src="/images/application.jpg" alt="Développement d'application" onerror="this.remove()"><span class="veil"></span>
           <svg class="art" viewBox="0 0 100 100" role="img" aria-label="Application mobile">
             <rect class="fill" x="34" y="16" width="32" height="68" rx="7"/>
             <rect x="40" y="24" width="20" height="30" rx="2" fill="#14459c" opacity=".9"/>
@@ -722,6 +733,7 @@
       </article>
       <article class="case reveal">
         <div class="visual v-d" data-tag="Marque">
+          <img class="photo" src="/images/marque.jpg" alt="Identité de marque et marketing" onerror="this.remove()"><span class="veil"></span>
           <svg class="art" viewBox="0 0 100 100" role="img" aria-label="Identité de marque">
             <circle class="soft" cx="50" cy="50" r="34" style="opacity:.22"/>
             <circle class="fill" cx="38" cy="40" r="9"/>
