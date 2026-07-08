@@ -73,7 +73,7 @@ Slogan : « Avec nous, l'innovation prend vie ».
 Domaines d'expertise : Réseaux & infrastructure, Cybersécurité, Supervision & maintenance,
 Développement web & mobile, Intégration DevSecOps, Community management & contenu,
 Marketing d'acquisition, Identité visuelle & design.
-Contact : email labnova48@gmail.com, téléphone +229 91 28 71 11, Instagram @labnova48.
+Contact : email labnova48@gmail.com, téléphone +229 91 28 71 11, Instagram @nova_lab__, TikTok @nova_lab97.
 Réponds en français, de façon professionnelle, chaleureuse et concise (2 à 4 phrases).
 Aide le visiteur à cerner son besoin et invite-le à laisser un message via le formulaire de contact
 ou à écrire à l'email pour un devis. N'invente jamais de tarifs précis ni de délais fermes.`;
