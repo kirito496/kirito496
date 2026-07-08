@@ -246,11 +246,11 @@
   .v-b{background:linear-gradient(200deg,#e8871e,#b0501c 60%,#5a2a14)}
   .v-c{background:linear-gradient(160deg,#c9c2b2,#8d867a 70%,#4a4740)}
   .v-d{background:linear-gradient(200deg,#232a54,#0e1230 70%,#070b1e)}
-  .case .glyph{
-    width:44%;aspect-ratio:1;border-radius:50%;
-    background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.75),rgba(255,255,255,.12) 45%,rgba(0,0,0,.25));
-    box-shadow:inset 0 0 30px rgba(255,255,255,.15), 0 18px 40px rgba(0,0,0,.35);
-  }
+  .case .art{width:62%;height:auto;display:block;filter:drop-shadow(0 14px 26px rgba(0,0,0,.35))}
+  .case .art .fill{fill:#fff;opacity:.92}
+  .case .art .soft{fill:#fff;opacity:.16}
+  .case .art .line{fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .case:hover .art{transform:translateY(-4px);transition:transform .3s ease}
   .case h3{font-size:15px;font-weight:600;letter-spacing:.02em}
   .case p{font-size:13.5px;color:rgba(255,255,255,.72);line-height:1.55}
   @media (max-width:980px){.work-grid{grid-template-columns:1fr 1fr}}
@@ -674,22 +674,55 @@
 
     <div class="work-grid">
       <article class="case reveal">
-        <div class="visual v-a" data-tag="Réseau"><div class="glyph"></div></div>
+        <div class="visual v-a" data-tag="Réseau">
+          <svg class="art" viewBox="0 0 100 100" role="img" aria-label="Schéma réseau">
+            <path class="line" d="M50 50 L24 26 M50 50 L76 26 M50 50 L24 74 M50 50 L76 74"/>
+            <rect class="fill" x="40" y="40" width="20" height="20" rx="4"/>
+            <rect class="soft" x="44" y="45" width="12" height="3" rx="1.5"/>
+            <rect class="soft" x="44" y="51" width="12" height="3" rx="1.5"/>
+            <circle class="fill" cx="24" cy="26" r="6"/><circle class="fill" cx="76" cy="26" r="6"/>
+            <circle class="fill" cx="24" cy="74" r="6"/><circle class="fill" cx="76" cy="74" r="6"/>
+          </svg>
+        </div>
         <h3>Projet A : Refonte réseau</h3>
         <p>Architecture réseau redondante et sécurisée pour une PME multi-sites. Disponibilité portée à 99,9 %.</p>
       </article>
       <article class="case reveal">
-        <div class="visual v-b" data-tag="Sécurité"><div class="glyph"></div></div>
+        <div class="visual v-b" data-tag="Sécurité">
+          <svg class="art" viewBox="0 0 100 100" role="img" aria-label="Bouclier de sécurité">
+            <path class="fill" d="M50 16 L78 27 V50 C78 68 66 80 50 86 C34 80 22 68 22 50 V27 Z"/>
+            <path d="M50 46 m-7 0 a7 7 0 1 1 14 0 a7 7 0 1 1 -14 0" fill="none" stroke="#14459c" stroke-width="4"/>
+            <rect x="47" y="50" width="6" height="12" rx="3" fill="#14459c"/>
+          </svg>
+        </div>
         <h3>Projet B : Audit &amp; sécurisation</h3>
         <p>Audit de vulnérabilités, firewall et VPN pour un cabinet. Surface d'attaque réduite et équipes sensibilisées.</p>
       </article>
       <article class="case reveal">
-        <div class="visual v-c" data-tag="Application"><div class="glyph"></div></div>
+        <div class="visual v-c" data-tag="Application">
+          <svg class="art" viewBox="0 0 100 100" role="img" aria-label="Application mobile">
+            <rect class="fill" x="34" y="16" width="32" height="68" rx="7"/>
+            <rect x="40" y="24" width="20" height="30" rx="2" fill="#14459c" opacity=".9"/>
+            <path class="line" stroke="#14459c" d="M45 34 l-3 4 l3 4 M55 34 l3 4 l-3 4" stroke-width="2"/>
+            <rect class="soft" x="40" y="59" width="20" height="3.5" rx="1.75" style="opacity:.55"/>
+            <rect class="soft" x="40" y="65" width="14" height="3.5" rx="1.75" style="opacity:.55"/>
+            <circle cx="50" cy="77" r="2.6" fill="#14459c"/>
+          </svg>
+        </div>
         <h3>Projet C : Application métier</h3>
         <p>Application web sur-mesure avec pipeline DevSecOps. Déploiements automatisés et sécurisés en continu.</p>
       </article>
       <article class="case reveal">
-        <div class="visual v-d" data-tag="Marque"><div class="glyph"></div></div>
+        <div class="visual v-d" data-tag="Marque">
+          <svg class="art" viewBox="0 0 100 100" role="img" aria-label="Identité de marque">
+            <circle class="soft" cx="50" cy="50" r="34" style="opacity:.22"/>
+            <circle class="fill" cx="38" cy="40" r="9"/>
+            <circle cx="62" cy="40" r="9" fill="#14459c"/>
+            <circle cx="38" cy="62" r="9" fill="#9db4dd"/>
+            <circle class="fill" cx="62" cy="62" r="9"/>
+            <text x="50" y="56" text-anchor="middle" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#17161a">A</text>
+          </svg>
+        </div>
         <h3>Projet D : Identité &amp; réseaux</h3>
         <p>Logo, charte graphique et animation des réseaux sociaux pour une startup. Communauté engagée dès le lancement.</p>
       </article>
