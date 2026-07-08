@@ -489,7 +489,8 @@
         <h3>Réseaux &amp; Infrastructure</h3>
         <p class="desc">Conception, déploiement et optimisation d'architectures d'entreprise résilientes et mobiles, taillées pour la performance et la disponibilité.</p>
         <ul>
-          <li>Architecture réseau</li><li>Haute disponibilité</li><li>Wi-Fi &amp; mobilité</li><li>Optimisation</li>
+          <li>Architecture réseau</li><li>LAN / WAN</li><li>Routage &amp; switching</li><li>VLAN</li>
+          <li>Wi-Fi &amp; mobilité</li><li>Haute disponibilité</li><li>Optimisation</li>
         </ul>
       </article>
 
@@ -498,7 +499,8 @@
         <h3>Cybersécurité</h3>
         <p class="desc">Audit de vulnérabilités, déploiement de firewalls et VPN sécurisés, et sensibilisation de vos équipes aux cybermenaces.</p>
         <ul>
-          <li>Audit &amp; pentest</li><li>Firewall</li><li>VPN sécurisé</li><li>Sensibilisation</li>
+          <li>Audit &amp; pentest</li><li>Firewall</li><li>VPN sécurisé</li><li>Gestion des accès</li>
+          <li>Chiffrement</li><li>Réponse à incident</li><li>Sensibilisation</li>
         </ul>
       </article>
 
@@ -507,7 +509,8 @@
         <h3>Supervision &amp; Maintenance</h3>
         <p class="desc">Monitoring permanent et maintenance préventive comme corrective de vos infrastructures critiques, pour une continuité de service sans faille.</p>
         <ul>
-          <li>Monitoring 24/7</li><li>Maintenance préventive</li><li>Support corrective</li><li>Continuité</li>
+          <li>Monitoring 24/7</li><li>Maintenance préventive</li><li>Maintenance corrective</li><li>Alerting</li>
+          <li>Sauvegardes</li><li>Continuité de service</li>
         </ul>
       </article>
 
@@ -517,6 +520,7 @@
         <p class="desc">Applications sur-mesure, hautement performantes et parfaitement alignées sur vos exigences métiers.</p>
         <ul>
           <li>Applications web</li><li>Applications mobiles</li><li>Sur-mesure</li><li>API &amp; intégrations</li>
+          <li>UX / UI</li><li>E-commerce</li><li>Maintenance</li>
         </ul>
       </article>
 
@@ -525,7 +529,8 @@
         <h3>Intégration DevSecOps</h3>
         <p class="desc">Automatisation complète des déploiements, avec la sécurité intégrée dès les premières étapes du cycle de développement logiciel.</p>
         <ul>
-          <li>CI / CD</li><li>Automatisation</li><li>Sécurité intégrée</li><li>Cloud</li>
+          <li>CI / CD</li><li>Automatisation</li><li>Sécurité intégrée</li><li>Docker &amp; conteneurs</li>
+          <li>Infrastructure as Code</li><li>Cloud</li><li>Monitoring</li>
         </ul>
       </article>
 
@@ -534,7 +539,8 @@
         <h3>Community Management &amp; Contenu</h3>
         <p class="desc">Animation créative de vos réseaux sociaux pour bâtir une communauté engagée et fidèle autour de votre marque.</p>
         <ul>
-          <li>Réseaux sociaux</li><li>Ligne éditoriale</li><li>Création de contenu</li><li>Engagement</li>
+          <li>Réseaux sociaux</li><li>Ligne éditoriale</li><li>Création de contenu</li><li>Calendrier éditorial</li>
+          <li>Community building</li><li>Engagement</li>
         </ul>
       </article>
 
@@ -543,7 +549,8 @@
         <h3>Marketing d'Acquisition</h3>
         <p class="desc">Campagnes publicitaires Meta Ads et Google Ads, référencement SEO / SEA et analyse avancée de votre trafic web.</p>
         <ul>
-          <li>Meta &amp; Google Ads</li><li>SEO</li><li>SEA</li><li>Analytics</li>
+          <li>Meta Ads</li><li>Google Ads</li><li>SEO</li><li>SEA</li>
+          <li>Emailing</li><li>Tunnel de conversion</li><li>Analytics</li>
         </ul>
       </article>
 
@@ -552,7 +559,8 @@
         <h3>Identité Visuelle &amp; Design</h3>
         <p class="desc">Création de chartes graphiques, de logos modernes et de supports de communication percutants qui affirment votre marque.</p>
         <ul>
-          <li>Logo</li><li>Charte graphique</li><li>UI / UX</li><li>Supports print</li>
+          <li>Logo</li><li>Charte graphique</li><li>Brand book</li><li>UI / UX</li>
+          <li>Motion design</li><li>Illustration</li><li>Supports print</li>
         </ul>
       </article>
     </div>
@@ -630,7 +638,7 @@
         <h2>Discutons de votre entreprise.</h2>
         <p class="sub">Racontez-nous votre projet — nous revenons vers vous sous 48&nbsp;h avec des premières pistes concrètes.</p>
         <div class="c-list">
-          <div><span>Email</span><a href="mailto:josechanceux560@gmail.com">josechanceux560@gmail.com</a></div>
+          <div><span>Email</span><a href="mailto:labnova48@gmail.com">labnova48@gmail.com</a></div>
           <div><span>Téléphone</span><a href="tel:+22991287111">+229 91 28 71 11</a></div>
           <div><span>Instagram</span><a href="https://instagram.com/labnova48" target="_blank" rel="noopener">@labnova48</a></div>
         </div>
@@ -935,7 +943,7 @@ document.getElementById('contact-form').addEventListener('submit', async e => {
     toast.textContent = `Message envoyé — merci ${data.name || ''} ! Nous vous répondons sous 48 h.`;
     e.target.reset();
   }catch{
-    toast.textContent = "L'envoi a échoué — réessayez, ou écrivez-nous à josechanceux560@gmail.com.";
+    toast.textContent = "L'envoi a échoué — réessayez, ou écrivez-nous à labnova48@gmail.com.";
   }
 });
 
@@ -985,7 +993,7 @@ document.getElementById('contact-form').addEventListener('submit', async e => {
       pending.textContent = d.reply;
       history.push({ role: 'assistant', content: d.reply });
     }catch(err){
-      pending.textContent = "Je ne peux pas répondre pour le moment. Écrivez-nous à josechanceux560@gmail.com ou au +229 91 28 71 11.";
+      pending.textContent = "Je ne peux pas répondre pour le moment. Écrivez-nous à labnova48@gmail.com ou au +229 91 28 71 11.";
     }
   });
 })();

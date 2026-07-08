@@ -73,7 +73,7 @@ Slogan : « Avec nous, l'innovation prend vie ».
 Domaines d'expertise : Réseaux & infrastructure, Cybersécurité, Supervision & maintenance,
 Développement web & mobile, Intégration DevSecOps, Community management & contenu,
 Marketing d'acquisition, Identité visuelle & design.
-Contact : email josechanceux560@gmail.com, téléphone +229 91 28 71 11, Instagram @labnova48.
+Contact : email labnova48@gmail.com, téléphone +229 91 28 71 11, Instagram @labnova48.
 Réponds en français, de façon professionnelle, chaleureuse et concise (2 à 4 phrases).
 Aide le visiteur à cerner son besoin et invite-le à laisser un message via le formulaire de contact
 ou à écrire à l'email pour un devis. N'invente jamais de tarifs précis ni de délais fermes.`;
@@ -84,7 +84,7 @@ app.post('/api/chat', async (req, res) => {
 
   if(!process.env.ANTHROPIC_API_KEY){
     return res.json({
-      reply: "L'assistant IA n'est pas encore activé. En attendant, écrivez-nous à josechanceux560@gmail.com " +
+      reply: "L'assistant IA n'est pas encore activé. En attendant, écrivez-nous à labnova48@gmail.com " +
              "ou au +229 91 28 71 11, ou laissez un message via le formulaire de contact — nous répondons sous 48 h."
     });
   }
@@ -112,7 +112,7 @@ app.post('/api/chat', async (req, res) => {
       return res.status(502).json({ error: 'Service IA indisponible.' });
     }
     const reply = (data.content || []).map(b => b.text || '').join('').trim();
-    res.json({ reply: reply || "Désolé, je n'ai pas de réponse. Contactez-nous à josechanceux560@gmail.com." });
+    res.json({ reply: reply || "Désolé, je n'ai pas de réponse. Contactez-nous à labnova48@gmail.com." });
   }catch(err){
     console.error('Erreur IA :', err);
     res.status(500).json({ error: 'Erreur serveur.' });
