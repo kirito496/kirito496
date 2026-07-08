@@ -1,9 +1,37 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const { Pool } = require('pg');
 
 const app = express();
 app.use(express.json());
+
+// Page d'accueil : on injecte les balises de partage (Open Graph / Twitter)
+// avec l'adresse réelle du site, pour un bel aperçu sur WhatsApp, Instagram,
+// Facebook, etc. — quel que soit le domaine final.
+const INDEX_HTML = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+function serveIndex(req, res){
+  const base = `${req.protocol}://${req.get('host')}`;
+  const meta = `
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Nova Lab">
+  <meta property="og:title" content="NOVA LAB — Avec nous, l'innovation prend vie">
+  <meta property="og:description" content="Réseaux, cybersécurité, développement web & mobile, DevSecOps, marketing et design. Une équipe d'ingénieurs pour concevoir, sécuriser et faire rayonner vos systèmes.">
+  <meta property="og:url" content="${base}/">
+  <meta property="og:image" content="${base}/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NOVA LAB — Avec nous, l'innovation prend vie">
+  <meta name="twitter:description" content="Ingénierie, sécurité et digital. Une équipe pour concevoir, sécuriser et faire rayonner vos systèmes.">
+  <meta name="twitter:image" content="${base}/og.png">
+  <meta name="description" content="Nova Lab : réseaux, cybersécurité, développement, DevSecOps, marketing et design. Avec nous, l'innovation prend vie.">
+`;
+  res.type('html').send(INDEX_HTML.replace('</head>', meta + '</head>'));
+}
+app.get('/', serveIndex);
+app.get('/index.html', serveIndex);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Railway fournit DATABASE_URL quand on ajoute une base PostgreSQL au projet.
