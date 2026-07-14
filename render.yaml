@@ -1,0 +1,34 @@
+# Déploiement Render.com du site NOVA LAB (plan gratuit, sans carte)
+# ────────────────────────────────────────────────────────────────────
+# 1. Sur https://render.com : New → Blueprint → dépôt kirito496/kirito496,
+#    branche claude/github-access-ha6nl8.
+# 2. Renseigne les variables marquées sync:false (copie-les depuis Railway
+#    AVANT la fermeture du projet Railway). Toutes sont OPTIONNELLES :
+#    le site fonctionne sans (base, IA et email sont alors inactifs).
+#
+# Limite du plan gratuit : le serveur s'endort après 15 min sans visite
+# (réveil ≈ 50 s pour le premier visiteur suivant).
+
+services:
+  - type: web
+    name: nova-lab
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # ── Optionnelles (copie depuis Railway si tu les utilises) ──
+      - key: DATABASE_URL
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: EMAIL_TO
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ADMIN_KEY
+        sync: false
