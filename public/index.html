@@ -446,18 +446,35 @@
     animation:iPulse .6s ease 1.85s both}
   @keyframes iPulse{0%{transform:scale(1)}45%{transform:scale(1.05)}100%{transform:scale(1)}}
 
-  /* chaque brin arrive de son côté, ondule, puis s'imbrique à sa place */
-  .v-branch{
+  /* chaque brin est tourné à sa place ; c'est le TRACÉ qui rampe */
+  .v-branch{transform-box:view-box;transform-origin:100px 100px}
+
+  /* le brin se dessine le long de sa courbe = il rampe comme un serpent,
+     avec une légère ondulation, tête en avant */
+  .v-strand{
+    fill:none;stroke:currentColor;stroke-width:8.5;
+    stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:100;stroke-dashoffset:100;
     transform-box:view-box;transform-origin:100px 100px;
-    filter:drop-shadow(0 0 5px currentColor);
-    animation:vBranch 1.1s cubic-bezier(.4,.05,.2,1) both;
+    filter:drop-shadow(0 0 4px currentColor);
+    animation:vCrawl .9s cubic-bezier(.45,.05,.35,1) both,
+              vWave 1.1s ease-in-out both;
   }
-  @keyframes vBranch{
-    0%  {transform:rotate(calc(var(--base) + var(--wob))) translate(0,-170px) scale(.35);opacity:0}
-    55% {opacity:1}
-    80% {transform:rotate(calc(var(--base) + 6deg)) translate(0,8px) scale(1.05)}   /* léger dépassement */
-    100%{transform:rotate(var(--base)) translate(0,0) scale(1);opacity:1}
+  @keyframes vCrawl{to{stroke-dashoffset:0}}          /* le corps rampe */
+  @keyframes vWave{                                    /* ondulation vivante */
+    0%{transform:rotate(-5deg)}
+    30%{transform:rotate(4deg)}
+    60%{transform:rotate(-2.5deg)}
+    100%{transform:rotate(0)}
   }
+
+  /* la boule (tête) se pose au bout du brin, comme sur le logo */
+  .v-head{
+    fill:currentColor;transform-box:fill-box;transform-origin:center;
+    filter:drop-shadow(0 0 4px currentColor);
+    opacity:0;animation:vHead .45s cubic-bezier(.2,1.6,.4,1) both;
+  }
+  @keyframes vHead{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
 
   /* NOVA LAB + slogan : lettres qui viennent de gauche/droite */
   .i-word{color:#eaf1ff;font-weight:800;font-size:clamp(26px,5.5vmin,42px);
@@ -465,11 +482,14 @@
   .i-tag{color:#9db8e6;font-size:clamp(11px,2.3vmin,15px);letter-spacing:.34em;
     text-transform:uppercase;margin-top:6px}
   .i-word span,.i-tag span{display:inline-block;opacity:0;
-    animation:iLetter .5s cubic-bezier(.2,.85,.3,1) both}
+    /* rebond élastique = les lettres prennent vie comme les brins */
+    animation:iLetter .65s cubic-bezier(.34,1.55,.5,1) both}
   .i-word .sp,.i-tag .sp{animation:none;opacity:1}
   @keyframes iLetter{
-    from{opacity:0;transform:translateX(var(--fx,40px))}
-    to{opacity:1;transform:translateX(0)}
+    0%  {opacity:0;transform:translate(var(--fx,40px),-16px) rotate(var(--fr,-14deg)) scale(.5)}
+    55% {opacity:1}
+    80% {transform:translate(0,3px) rotate(2deg) scale(1.08)}   /* léger dépassement */
+    100%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -485,21 +505,33 @@
 <div id="intro" role="img" aria-label="Nova Lab — L'innovation prend vie">
   <div class="i-stage">
     <svg class="i-vstar" viewBox="0 0 200 200" aria-label="Logo Nova Lab" role="img">
-      <defs>
-        <!-- un seul brin courbe (une branche de l'étoile) + une personne -->
-        <g id="nlBranch">
-          <path d="M82.4 75.7 Q88 44 100 20 Q112 44 117.6 75.7" fill="none"
-                stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="100" cy="15" r="6" fill="currentColor"/>
-          <path d="M91 28 Q100 21 109 28" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round"/>
-        </g>
-      </defs>
-      <!-- 5 brins identiques, tournés de 72° : ils s'imbriquent en étoile -->
-      <use class="v-branch" href="#nlBranch" style="color:#f5a623;--base:0deg;--wob:-32deg;animation-delay:.10s"/>
-      <use class="v-branch" href="#nlBranch" style="color:#2bb0c4;--base:72deg;--wob:30deg;animation-delay:.26s"/>
-      <use class="v-branch" href="#nlBranch" style="color:#1e56b0;--base:144deg;--wob:-30deg;animation-delay:.42s"/>
-      <use class="v-branch" href="#nlBranch" style="color:#4f8ee0;--base:216deg;--wob:32deg;animation-delay:.58s"/>
-      <use class="v-branch" href="#nlBranch" style="color:#8f7fe0;--base:288deg;--wob:-28deg;animation-delay:.74s"/>
+      <!-- 5 brins : chacun RAMPE le long de sa courbe (serpent) puis la boule
+           (tête) se pose. Tournés de 72° → ils s'imbriquent en étoile. -->
+      <g class="v-branch" style="transform:rotate(0deg);color:#f5a623">
+        <path class="v-strand" pathLength="100" style="animation-delay:.05s"
+              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
+        <circle class="v-head" style="animation-delay:.95s" cx="100" cy="14" r="6"/>
+      </g>
+      <g class="v-branch" style="transform:rotate(72deg);color:#2bb0c4">
+        <path class="v-strand" pathLength="100" style="animation-delay:.23s"
+              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
+        <circle class="v-head" style="animation-delay:1.13s" cx="100" cy="14" r="6"/>
+      </g>
+      <g class="v-branch" style="transform:rotate(144deg);color:#1e56b0">
+        <path class="v-strand" pathLength="100" style="animation-delay:.41s"
+              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
+        <circle class="v-head" style="animation-delay:1.31s" cx="100" cy="14" r="6"/>
+      </g>
+      <g class="v-branch" style="transform:rotate(216deg);color:#4f8ee0">
+        <path class="v-strand" pathLength="100" style="animation-delay:.59s"
+              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
+        <circle class="v-head" style="animation-delay:1.49s" cx="100" cy="14" r="6"/>
+      </g>
+      <g class="v-branch" style="transform:rotate(288deg);color:#8f7fe0">
+        <path class="v-strand" pathLength="100" style="animation-delay:.77s"
+              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
+        <circle class="v-head" style="animation-delay:1.67s" cx="100" cy="14" r="6"/>
+      </g>
     </svg>
     <div class="i-word" aria-label="NOVA LAB">NOVA LAB</div>
     <div class="i-tag" aria-label="L'innovation prend vie">L'innovation prend vie</div>
@@ -867,17 +899,18 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       else{
         s.textContent = ch;
         s.style.setProperty('--fx', (i % 2 ? 44 : -44) + 'px'); /* de part et d'autre */
+        s.style.setProperty('--fr', (i % 2 ? 16 : -16) + 'deg'); /* et en tournant (vivant) */
         s.style.animationDelay = (start + i * step) + 's';
       }
       el.appendChild(s);
     });
   }
-  letters(intro.querySelector('.i-word'), 2.0, 0.07);   /* NOVA LAB après l'assemblage */
-  letters(intro.querySelector('.i-tag'), 2.75, 0.035);  /* le slogan en dernier */
+  letters(intro.querySelector('.i-word'), 2.3, 0.07);   /* NOVA LAB après les serpents */
+  letters(intro.querySelector('.i-tag'), 3.05, 0.035);  /* le slogan en dernier */
 
   document.body.classList.add('intro-lock');
   window.scrollTo(0, 0);
-  const timer = setTimeout(finish, 4900);           /* fin automatique de l'intro */
+  const timer = setTimeout(finish, 5200);           /* fin automatique de l'intro */
   document.getElementById('intro-skip').addEventListener('click', () => { clearTimeout(timer); finish(); });
 })();
 
