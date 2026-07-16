@@ -440,41 +440,15 @@
   /* éléments animés */
   .i-stage{display:flex;flex-direction:column;align-items:center;gap:6px}
 
-  /* Le logo redessiné en brins vectoriels vivants */
-  .i-vstar{width:min(46vmin,240px);height:auto;display:block;
-    filter:drop-shadow(0 6px 22px rgba(63,127,214,.5));
-    animation:iPulse .6s ease 1.85s both}
-  @keyframes iPulse{0%{transform:scale(1)}45%{transform:scale(1.05)}100%{transform:scale(1)}}
-
-  /* chaque brin est tourné à sa place ; c'est le TRACÉ qui rampe */
-  .v-branch{transform-box:view-box;transform-origin:100px 100px}
-
-  /* le brin se dessine le long de sa courbe = il rampe comme un serpent,
-     avec une légère ondulation, tête en avant */
-  .v-strand{
-    fill:none;stroke:currentColor;stroke-width:8.5;
-    stroke-linecap:round;stroke-linejoin:round;
-    stroke-dasharray:100;stroke-dashoffset:100;
-    transform-box:view-box;transform-origin:100px 100px;
-    filter:drop-shadow(0 0 4px currentColor);
-    animation:vCrawl .9s cubic-bezier(.45,.05,.35,1) both,
-              vWave 1.1s ease-in-out both;
-  }
-  @keyframes vCrawl{to{stroke-dashoffset:0}}          /* le corps rampe */
-  @keyframes vWave{                                    /* ondulation vivante */
-    0%{transform:rotate(-5deg)}
-    30%{transform:rotate(4deg)}
-    60%{transform:rotate(-2.5deg)}
-    100%{transform:rotate(0)}
-  }
-
-  /* la boule (tête) se pose au bout du brin, comme sur le logo */
-  .v-head{
-    fill:currentColor;transform-box:fill-box;transform-origin:center;
-    filter:drop-shadow(0 0 4px currentColor);
-    opacity:0;animation:vHead .45s cubic-bezier(.2,1.6,.4,1) both;
-  }
-  @keyframes vHead{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+  /* Le VRAI logo (fidèle) qui se forme en ondulant comme un liquide vivant */
+  .i-logo-wrap{position:relative;width:min(46vmin,240px);aspect-ratio:157/168;
+    display:grid;place-items:center;
+    filter:drop-shadow(0 6px 24px rgba(63,127,214,.55))}
+  .i-logo{width:100%;height:auto;display:block;
+    filter:url(#nlWobble);
+    opacity:0;transform:scale(.62);
+    animation:iLogoIn 1s cubic-bezier(.2,.9,.3,1) both}
+  @keyframes iLogoIn{0%{opacity:0;transform:scale(.62)}55%{opacity:1}100%{opacity:1;transform:scale(1)}}
 
   /* NOVA LAB + slogan : lettres qui viennent de gauche/droite */
   .i-word{color:#eaf1ff;font-weight:800;font-size:clamp(26px,5.5vmin,42px);
@@ -504,34 +478,23 @@
 <!-- ======================= INTRO CINÉMATIQUE ======================= -->
 <div id="intro" role="img" aria-label="Nova Lab — L'innovation prend vie">
   <div class="i-stage">
-    <svg class="i-vstar" viewBox="0 0 200 200" aria-label="Logo Nova Lab" role="img">
-      <!-- 5 brins : chacun RAMPE le long de sa courbe (serpent) puis la boule
-           (tête) se pose. Tournés de 72° → ils s'imbriquent en étoile. -->
-      <g class="v-branch" style="transform:rotate(0deg);color:#f5a623">
-        <path class="v-strand" pathLength="100" style="animation-delay:.05s"
-              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
-        <circle class="v-head" style="animation-delay:.95s" cx="100" cy="14" r="6"/>
-      </g>
-      <g class="v-branch" style="transform:rotate(72deg);color:#2bb0c4">
-        <path class="v-strand" pathLength="100" style="animation-delay:.23s"
-              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
-        <circle class="v-head" style="animation-delay:1.13s" cx="100" cy="14" r="6"/>
-      </g>
-      <g class="v-branch" style="transform:rotate(144deg);color:#1e56b0">
-        <path class="v-strand" pathLength="100" style="animation-delay:.41s"
-              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
-        <circle class="v-head" style="animation-delay:1.31s" cx="100" cy="14" r="6"/>
-      </g>
-      <g class="v-branch" style="transform:rotate(216deg);color:#4f8ee0">
-        <path class="v-strand" pathLength="100" style="animation-delay:.59s"
-              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
-        <circle class="v-head" style="animation-delay:1.49s" cx="100" cy="14" r="6"/>
-      </g>
-      <g class="v-branch" style="transform:rotate(288deg);color:#8f7fe0">
-        <path class="v-strand" pathLength="100" style="animation-delay:.77s"
-              d="M82.4 75.7 C84 55 91 32 100 17 C109 32 116 55 117.6 75.7"/>
-        <circle class="v-head" style="animation-delay:1.67s" cx="100" cy="14" r="6"/>
-      </g>
+    <div class="i-logo-wrap">
+      <img class="i-logo" src="/logo-star.png" alt="Logo Nova Lab">
+    </div>
+    <!-- filtre d'ondulation « liquide vivant » (feTurbulence + déplacement) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <filter id="nlWobble" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.02 0.028" numOctaves="2" seed="7" result="n">
+            <animate attributeName="baseFrequency" dur="2.6s" repeatCount="indefinite"
+                     values="0.022 0.03; 0.012 0.018; 0.022 0.03"/>
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="n" xChannelSelector="R" yChannelSelector="G" scale="28">
+            <animate attributeName="scale" dur="2.1s" fill="freeze"
+                     keyTimes="0;0.5;1" values="30;22;0"/>
+          </feDisplacementMap>
+        </filter>
+      </defs>
     </svg>
     <div class="i-word" aria-label="NOVA LAB">NOVA LAB</div>
     <div class="i-tag" aria-label="L'innovation prend vie">L'innovation prend vie</div>
@@ -905,12 +868,12 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       el.appendChild(s);
     });
   }
-  letters(intro.querySelector('.i-word'), 2.3, 0.07);   /* NOVA LAB après les serpents */
-  letters(intro.querySelector('.i-tag'), 3.05, 0.035);  /* le slogan en dernier */
+  letters(intro.querySelector('.i-word'), 2.2, 0.07);   /* NOVA LAB une fois le logo figé */
+  letters(intro.querySelector('.i-tag'), 2.95, 0.035);  /* le slogan en dernier */
 
   document.body.classList.add('intro-lock');
   window.scrollTo(0, 0);
-  const timer = setTimeout(finish, 5200);           /* fin automatique de l'intro */
+  const timer = setTimeout(finish, 5100);           /* fin automatique de l'intro */
   document.getElementById('intro-skip').addEventListener('click', () => { clearTimeout(timer); finish(); });
 })();
 
