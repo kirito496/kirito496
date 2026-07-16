@@ -440,36 +440,30 @@
   /* éléments animés */
   .i-stage{display:flex;flex-direction:column;align-items:center;gap:6px}
 
-  /* Zone du logo : les fils ondulent puis le vrai logo se forme au centre */
-  .i-logo-zone{position:relative;width:min(52vmin,280px);aspect-ratio:1;
-    display:grid;place-items:center}
-  .i-threads{position:absolute;inset:0;width:100%;height:100%;
-    transform-origin:center;
-    animation:threadsOut .7s cubic-bezier(.5,0,.4,1) 2s forwards}
-  @keyframes threadsOut{to{transform:scale(.12) rotate(65deg);opacity:0}}
+  /* Zone du logo : les 5 vraies branches s'assemblent en ondulant */
+  .i-logo-wrap{position:relative;width:min(46vmin,240px);aspect-ratio:157/168;
+    display:grid;place-items:center;
+    filter:drop-shadow(0 6px 26px rgba(63,127,214,.5));
+    animation:iPulse .5s ease 1.75s both}
+  @keyframes iPulse{0%{transform:scale(1)}45%{transform:scale(1.06)}100%{transform:scale(1)}}
 
-  /* chaque fil = un serpent lumineux qui tourne, croise et se sépare */
-  .i-thread{
-    fill:none;stroke-width:3.2;stroke-linecap:round;
-    stroke-dasharray:20 80;
-    filter:drop-shadow(0 0 5px currentColor);
-    animation:threadRun var(--dur,1.4s) linear infinite;
+  .i-branch{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+    /* dépassement élastique = mouvement vivant qui « rebondit » à sa place */
+    animation:iBranch .95s cubic-bezier(.34,1.45,.5,1) both;
   }
-  @keyframes threadRun{to{stroke-dashoffset:-100}}
+  @keyframes iBranch{
+    0%{transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(.5);opacity:0}
+    50%{opacity:1}
+    100%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
+  }
 
-  /* éclat lumineux au moment où le logo se forme */
-  .i-flash{position:absolute;width:70%;aspect-ratio:1;border-radius:50%;
-    background:radial-gradient(circle,rgba(130,180,255,.85),rgba(130,180,255,0) 70%);
+  /* éclat lumineux au moment où l'étoile se referme */
+  .i-flash{position:absolute;width:75%;aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle,rgba(130,180,255,.8),rgba(130,180,255,0) 70%);
     opacity:0;pointer-events:none;
-    animation:iFlash .8s ease 2.02s forwards}
-  @keyframes iFlash{0%{opacity:0;transform:scale(.2)}40%{opacity:1}100%{opacity:0;transform:scale(1.7)}}
-
-  /* le vrai logo apparaît quand les fils se rassemblent */
-  .i-logo{position:absolute;width:66%;height:auto;opacity:0;transform:scale(.35) rotate(-12deg);
-    filter:drop-shadow(0 6px 26px rgba(63,127,214,.6));
-    animation:iLogoIn .9s cubic-bezier(.2,.9,.3,1) 2s forwards}
-  @keyframes iLogoIn{0%{opacity:0;transform:scale(.35) rotate(-12deg)}
-    55%{opacity:1}100%{opacity:1;transform:scale(1) rotate(0)}}
+    animation:iFlash .8s ease 1.65s forwards}
+  @keyframes iFlash{0%{opacity:0;transform:scale(.2)}40%{opacity:.9}100%{opacity:0;transform:scale(1.7)}}
 
   /* NOVA LAB + slogan : lettres qui viennent de gauche/droite */
   .i-word{color:#eaf1ff;font-weight:800;font-size:clamp(26px,5.5vmin,42px);
@@ -496,18 +490,14 @@
 <!-- ======================= INTRO CINÉMATIQUE ======================= -->
 <div id="intro" role="img" aria-label="Nova Lab — L'innovation prend vie">
   <div class="i-stage">
-    <div class="i-logo-zone">
-      <!-- des fils lumineux tournent, se croisent et se séparent (hypnotique) -->
-      <svg class="i-threads" viewBox="0 0 200 200" aria-hidden="true">
-        <g transform="rotate(0 100 100)"><ellipse class="i-thread" cx="100" cy="100" rx="80" ry="22" pathLength="100" style="stroke:#f5a623;color:#f5a623;--dur:1.05s"/></g>
-        <g transform="rotate(30 100 100)"><ellipse class="i-thread" cx="100" cy="100" rx="74" ry="27" pathLength="100" style="stroke:#2bb0c4;color:#2bb0c4;--dur:1.35s"/></g>
-        <g transform="rotate(60 100 100)"><ellipse class="i-thread" cx="100" cy="100" rx="82" ry="18" pathLength="100" style="stroke:#1e56b0;color:#4f8ee0;--dur:0.95s"/></g>
-        <g transform="rotate(90 100 100)"><ellipse class="i-thread" cx="100" cy="100" rx="70" ry="30" pathLength="100" style="stroke:#8f7fe0;color:#8f7fe0;--dur:1.55s"/></g>
-        <g transform="rotate(120 100 100)"><ellipse class="i-thread" cx="100" cy="100" rx="78" ry="24" pathLength="100" style="stroke:#4f8ee0;color:#4f8ee0;--dur:1.2s"/></g>
-        <g transform="rotate(150 100 100)"><ellipse class="i-thread" cx="100" cy="100" rx="76" ry="20" pathLength="100" style="stroke:#2bb0c4;color:#2bb0c4;--dur:1.45s"/></g>
-      </svg>
+    <div class="i-logo-wrap" aria-label="Logo Nova Lab" role="img">
+      <!-- les 5 VRAIES branches du logo arrivent en ondulant et se posent -->
+      <img class="i-branch" style="--tx:0px;--ty:-145px;--rot:-26deg;animation-delay:.15s"  src="/logo-sec0.png" alt="">
+      <img class="i-branch" style="--tx:135px;--ty:-44px;--rot:24deg;animation-delay:.30s"   src="/logo-sec1.png" alt="">
+      <img class="i-branch" style="--tx:84px;--ty:115px;--rot:-22deg;animation-delay:.45s"   src="/logo-sec2.png" alt="">
+      <img class="i-branch" style="--tx:-84px;--ty:115px;--rot:26deg;animation-delay:.60s"   src="/logo-sec3.png" alt="">
+      <img class="i-branch" style="--tx:-135px;--ty:-44px;--rot:-24deg;animation-delay:.75s" src="/logo-sec4.png" alt="">
       <span class="i-flash" aria-hidden="true"></span>
-      <img class="i-logo" src="/logo-star.png" alt="Logo Nova Lab">
     </div>
     <div class="i-word" aria-label="NOVA LAB">NOVA LAB</div>
     <div class="i-tag" aria-label="L'innovation prend vie">L'innovation prend vie</div>
@@ -880,12 +870,12 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       el.appendChild(s);
     });
   }
-  letters(intro.querySelector('.i-word'), 2.75, 0.07);  /* NOVA LAB après la formation du logo */
-  letters(intro.querySelector('.i-tag'), 3.5, 0.035);   /* le slogan en dernier */
+  letters(intro.querySelector('.i-word'), 2.0, 0.07);   /* NOVA LAB après l'assemblage */
+  letters(intro.querySelector('.i-tag'), 2.75, 0.035);  /* le slogan en dernier */
 
   document.body.classList.add('intro-lock');
   window.scrollTo(0, 0);
-  const timer = setTimeout(finish, 5400);           /* fin automatique de l'intro */
+  const timer = setTimeout(finish, 4900);           /* fin automatique de l'intro */
   document.getElementById('intro-skip').addEventListener('click', () => { clearTimeout(timer); finish(); });
 })();
 
