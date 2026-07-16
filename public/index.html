@@ -477,23 +477,29 @@
   <svg viewBox="-24 0 248 200" aria-hidden="true" style="overflow:visible">
     <defs>
       <linearGradient id="iStarGrad" x1="55" y1="25" x2="145" y2="110" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#4f8ee0"/>
-        <stop offset=".5" stop-color="#1e56b0"/>
+        <stop offset="0" stop-color="#9fb3d8"/>
+        <stop offset=".32" stop-color="#6a5acd"/>
+        <stop offset=".62" stop-color="#1e56b0"/>
         <stop offset="1" stop-color="#2bb0c4"/>
       </linearGradient>
     </defs>
     <g class="i-stage">
-      <!-- l'étoile se dessine d'un seul trait -->
+      <!-- l'étoile (brins arrondis) se dessine d'un seul trait -->
       <path class="i-star an" pathLength="1"
             d="M100 28 L124.7 104 L60.1 57 L139.9 57 L75.3 104 Z"
-            fill="none" stroke="url(#iStarGrad)" stroke-width="6.5"
+            fill="none" stroke="url(#iStarGrad)" stroke-width="7.5"
             stroke-linejoin="round" stroke-linecap="round"/>
-      <!-- les nœuds surgissent aux pointes -->
-      <circle class="i-node an" style="animation-delay:1.35s" cx="100"   cy="28"  r="7" fill="#f5a623"/>
-      <circle class="i-node an" style="animation-delay:1.48s" cx="139.9" cy="57"  r="7" fill="#2bb0c4"/>
-      <circle class="i-node an" style="animation-delay:1.61s" cx="124.7" cy="104" r="7" fill="#1e56b0"/>
-      <circle class="i-node an" style="animation-delay:1.74s" cx="75.3"  cy="104" r="7" fill="#4f8ee0"/>
-      <circle class="i-node an" style="animation-delay:1.87s" cx="60.1"  cy="57"  r="7" fill="#f5a623"/>
+      <!-- de petites silhouettes de personnes surgissent aux pointes (tête + épaules) -->
+      <g class="i-node an" style="animation-delay:1.35s" fill="#f5a623" stroke="#f5a623" stroke-width="3" stroke-linecap="round">
+        <circle cx="100" cy="26" r="5"/><path d="M93 39 Q100 32 107 39" fill="none"/></g>
+      <g class="i-node an" style="animation-delay:1.48s" fill="#2bb0c4" stroke="#2bb0c4" stroke-width="3" stroke-linecap="round">
+        <circle cx="141" cy="55" r="5"/><path d="M134 68 Q141 61 148 68" fill="none"/></g>
+      <g class="i-node an" style="animation-delay:1.61s" fill="#1e56b0" stroke="#1e56b0" stroke-width="3" stroke-linecap="round">
+        <circle cx="125" cy="103" r="5"/><path d="M118 116 Q125 109 132 116" fill="none"/></g>
+      <g class="i-node an" style="animation-delay:1.74s" fill="#4f8ee0" stroke="#4f8ee0" stroke-width="3" stroke-linecap="round">
+        <circle cx="75" cy="103" r="5"/><path d="M68 116 Q75 109 82 116" fill="none"/></g>
+      <g class="i-node an" style="animation-delay:1.87s" fill="#8f7fe0" stroke="#8f7fe0" stroke-width="3" stroke-linecap="round">
+        <circle cx="59" cy="55" r="5"/><path d="M52 68 Q59 61 66 68" fill="none"/></g>
       <!-- nom + slogan -->
       <text class="i-word an" x="100" y="150" text-anchor="middle" fill="#eaf1ff"
             font-family="Helvetica,Arial,sans-serif" font-size="26" font-weight="800" letter-spacing="2">NOVA LAB</text>
