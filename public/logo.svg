@@ -1,22 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="50" fill="#14459c"/>
-  <circle cx="50" cy="50" r="41" fill="#edeae3"/>
-  <g fill="#8fa9cf">
-    <circle cx="41.5" cy="31" r="9.5"/>
-    <rect x="39.3" y="19.5" width="4.4" height="5"/>
-    <rect x="39.3" y="37.5" width="4.4" height="5"/>
-    <rect x="29.8" y="28.8" width="5" height="4.4"/>
-    <rect x="47.8" y="28.8" width="5" height="4.4"/>
-  </g>
-  <circle cx="41.5" cy="31" r="4.3" fill="#14459c"/>
-  <g fill="none" stroke="#14459c" stroke-width="1.4">
-    <path d="M52 27 h7 v-5"/>
-    <path d="M52 33 h10"/>
-    <path d="M52 39 h7 v6"/>
-  </g>
-  <g fill="#14459c">
-    <circle cx="59" cy="21.5" r="2.1"/><circle cx="63.2" cy="33" r="2.1"/><circle cx="59.4" cy="45.4" r="2.1"/>
-  </g>
-  <text x="50" y="70" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="34" font-weight="700" fill="#17161a" letter-spacing="1">NL</text>
-  <text x="50" y="82" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="8" letter-spacing="3" fill="#17161a">NOVA LAB</text>
+  <defs>
+    <linearGradient id="nlStar" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3f7fd6"/>
+      <stop offset=".5" stop-color="#14459c"/>
+      <stop offset="1" stop-color="#2bb0c4"/>
+    </linearGradient>
+  </defs>
+  <!-- étoile réseau (tracé continu façon pentagramme) -->
+  <path d="M50 12 L72.3 80.7 L13.9 38.3 L86.1 38.3 L27.7 80.7 Z"
+        fill="none" stroke="url(#nlStar)" stroke-width="7"
+        stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- nœuds aux 5 pointes -->
+  <circle cx="50"   cy="12"   r="6" fill="#f5a623"/>
+  <circle cx="86.1" cy="38.3" r="6" fill="#2bb0c4"/>
+  <circle cx="72.3" cy="80.7" r="6" fill="#14459c"/>
+  <circle cx="27.7" cy="80.7" r="6" fill="#3f7fd6"/>
+  <circle cx="13.9" cy="38.3" r="6" fill="#f5a623"/>
 </svg>
