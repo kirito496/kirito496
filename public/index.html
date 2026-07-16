@@ -440,30 +440,24 @@
   /* éléments animés */
   .i-stage{display:flex;flex-direction:column;align-items:center;gap:6px}
 
-  /* Zone du logo : les 5 vraies branches s'assemblent en ondulant */
-  .i-logo-wrap{position:relative;width:min(46vmin,240px);aspect-ratio:157/168;
-    display:grid;place-items:center;
-    filter:drop-shadow(0 6px 26px rgba(63,127,214,.5));
-    animation:iPulse .5s ease 1.75s both}
-  @keyframes iPulse{0%{transform:scale(1)}45%{transform:scale(1.06)}100%{transform:scale(1)}}
+  /* Le logo redessiné en brins vectoriels vivants */
+  .i-vstar{width:min(46vmin,240px);height:auto;display:block;
+    filter:drop-shadow(0 6px 22px rgba(63,127,214,.5));
+    animation:iPulse .6s ease 1.85s both}
+  @keyframes iPulse{0%{transform:scale(1)}45%{transform:scale(1.05)}100%{transform:scale(1)}}
 
-  .i-branch{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
-    /* dépassement élastique = mouvement vivant qui « rebondit » à sa place */
-    animation:iBranch .95s cubic-bezier(.34,1.45,.5,1) both;
+  /* chaque brin arrive de son côté, ondule, puis s'imbrique à sa place */
+  .v-branch{
+    transform-box:view-box;transform-origin:100px 100px;
+    filter:drop-shadow(0 0 5px currentColor);
+    animation:vBranch 1.1s cubic-bezier(.4,.05,.2,1) both;
   }
-  @keyframes iBranch{
-    0%{transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(.5);opacity:0}
-    50%{opacity:1}
-    100%{transform:translate(0,0) rotate(0) scale(1);opacity:1}
+  @keyframes vBranch{
+    0%  {transform:rotate(calc(var(--base) + var(--wob))) translate(0,-170px) scale(.35);opacity:0}
+    55% {opacity:1}
+    80% {transform:rotate(calc(var(--base) + 6deg)) translate(0,8px) scale(1.05)}   /* léger dépassement */
+    100%{transform:rotate(var(--base)) translate(0,0) scale(1);opacity:1}
   }
-
-  /* éclat lumineux au moment où l'étoile se referme */
-  .i-flash{position:absolute;width:75%;aspect-ratio:1;border-radius:50%;
-    background:radial-gradient(circle,rgba(130,180,255,.8),rgba(130,180,255,0) 70%);
-    opacity:0;pointer-events:none;
-    animation:iFlash .8s ease 1.65s forwards}
-  @keyframes iFlash{0%{opacity:0;transform:scale(.2)}40%{opacity:.9}100%{opacity:0;transform:scale(1.7)}}
 
   /* NOVA LAB + slogan : lettres qui viennent de gauche/droite */
   .i-word{color:#eaf1ff;font-weight:800;font-size:clamp(26px,5.5vmin,42px);
@@ -490,15 +484,23 @@
 <!-- ======================= INTRO CINÉMATIQUE ======================= -->
 <div id="intro" role="img" aria-label="Nova Lab — L'innovation prend vie">
   <div class="i-stage">
-    <div class="i-logo-wrap" aria-label="Logo Nova Lab" role="img">
-      <!-- les 5 VRAIES branches du logo arrivent en ondulant et se posent -->
-      <img class="i-branch" style="--tx:0px;--ty:-145px;--rot:-26deg;animation-delay:.15s"  src="/logo-sec0.png" alt="">
-      <img class="i-branch" style="--tx:135px;--ty:-44px;--rot:24deg;animation-delay:.30s"   src="/logo-sec1.png" alt="">
-      <img class="i-branch" style="--tx:84px;--ty:115px;--rot:-22deg;animation-delay:.45s"   src="/logo-sec2.png" alt="">
-      <img class="i-branch" style="--tx:-84px;--ty:115px;--rot:26deg;animation-delay:.60s"   src="/logo-sec3.png" alt="">
-      <img class="i-branch" style="--tx:-135px;--ty:-44px;--rot:-24deg;animation-delay:.75s" src="/logo-sec4.png" alt="">
-      <span class="i-flash" aria-hidden="true"></span>
-    </div>
+    <svg class="i-vstar" viewBox="0 0 200 200" aria-label="Logo Nova Lab" role="img">
+      <defs>
+        <!-- un seul brin courbe (une branche de l'étoile) + une personne -->
+        <g id="nlBranch">
+          <path d="M82.4 75.7 Q88 44 100 20 Q112 44 117.6 75.7" fill="none"
+                stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="100" cy="15" r="6" fill="currentColor"/>
+          <path d="M91 28 Q100 21 109 28" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round"/>
+        </g>
+      </defs>
+      <!-- 5 brins identiques, tournés de 72° : ils s'imbriquent en étoile -->
+      <use class="v-branch" href="#nlBranch" style="color:#f5a623;--base:0deg;--wob:-32deg;animation-delay:.10s"/>
+      <use class="v-branch" href="#nlBranch" style="color:#2bb0c4;--base:72deg;--wob:30deg;animation-delay:.26s"/>
+      <use class="v-branch" href="#nlBranch" style="color:#1e56b0;--base:144deg;--wob:-30deg;animation-delay:.42s"/>
+      <use class="v-branch" href="#nlBranch" style="color:#4f8ee0;--base:216deg;--wob:32deg;animation-delay:.58s"/>
+      <use class="v-branch" href="#nlBranch" style="color:#8f7fe0;--base:288deg;--wob:-28deg;animation-delay:.74s"/>
+    </svg>
     <div class="i-word" aria-label="NOVA LAB">NOVA LAB</div>
     <div class="i-tag" aria-label="L'innovation prend vie">L'innovation prend vie</div>
   </div>
