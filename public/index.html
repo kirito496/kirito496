@@ -443,35 +443,39 @@
     animation:iStage 1.1s ease 3.2s both}
   @keyframes iStage{from{transform:scale(1)}to{transform:scale(1.05)}}
 
-  /* la vraie étoile apparaît : fondu + zoom + halo bleu */
-  .i-logo-wrap{position:relative;display:inline-block;overflow:hidden;border-radius:14px}
-  .i-logo{
-    width:min(38vmin,180px);height:auto;display:block;
-    filter:drop-shadow(0 6px 26px rgba(63,127,214,.55));
-    animation:iLogo 1.2s cubic-bezier(.2,.75,.3,1) .2s both;
+  /* l'étoile se recompose : 5 branches volent se rassembler */
+  .i-logo-wrap{position:relative;width:min(38vmin,180px);aspect-ratio:157/168;
+    filter:drop-shadow(0 6px 26px rgba(63,127,214,.55))}
+  .i-sec{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+    animation:iAssemble .75s cubic-bezier(.2,.9,.3,1) both;
   }
-  @keyframes iLogo{
-    0%{transform:scale(.55) rotate(-8deg);opacity:0}
-    60%{opacity:1}
-    100%{transform:scale(1) rotate(0);opacity:1}
+  @keyframes iAssemble{
+    0%{transform:translate(var(--tx),var(--ty)) scale(.35) rotate(var(--rot));opacity:0}
+    55%{opacity:1}
+    100%{transform:translate(0,0) scale(1) rotate(0);opacity:1}
   }
-  /* reflet de lumière qui balaie l'étoile */
+  /* reflet de lumière qui balaie l'étoile une fois assemblée */
   .i-sheen{
     position:absolute;top:0;left:-60%;width:45%;height:100%;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
     transform:skewX(-18deg);
-    animation:iSheen 1s ease 1.3s both;
+    animation:iSheen .9s ease 1.55s both;
   }
-  @keyframes iSheen{from{left:-60%}to{left:130%}}
+  @keyframes iSheen{from{left:-60%;opacity:0}20%{opacity:1}to{left:135%;opacity:0}}
 
+  /* NOVA LAB : les lettres arrivent l'une après l'autre */
   .i-word{color:#eaf1ff;font-weight:800;font-size:clamp(26px,5.5vmin,42px);
-    letter-spacing:.14em;margin-top:14px;
-    animation:iWord .8s cubic-bezier(.2,.75,.3,1) 1.9s both}
-  @keyframes iWord{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+    letter-spacing:.14em;margin-top:16px}
+  .i-word span{display:inline-block;opacity:0;transform:translateY(16px);
+    animation:iLetter .5s cubic-bezier(.2,.85,.3,1) forwards}
+  .i-word .sp{width:.35em;animation:none;opacity:1}
+  @keyframes iLetter{to{opacity:1;transform:translateY(0)}}
 
+  /* le slogan arrive en dernier */
   .i-tag{color:#9db8e6;font-size:clamp(11px,2.3vmin,15px);letter-spacing:.34em;
-    text-transform:uppercase;
-    animation:iTag .8s ease 2.35s both}
+    text-transform:uppercase;margin-top:4px;
+    animation:iTag .8s ease 2.4s both}
   @keyframes iTag{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:.95}}
 
   @media (prefers-reduced-motion: reduce){
@@ -486,11 +490,18 @@
 <!-- ======================= INTRO CINÉMATIQUE ======================= -->
 <div id="intro" role="img" aria-label="Nova Lab — L'innovation prend vie">
   <div class="i-stage">
-    <div class="i-logo-wrap">
-      <img class="i-logo" src="/logo-star.png" alt="Logo Nova Lab" width="170" height="182">
-      <span class="i-sheen" aria-hidden="true"></span>
+    <div class="i-logo-wrap" aria-hidden="true">
+      <!-- les 5 branches se rassemblent pour former l'etoile -->
+      <img class="i-sec" style="--tx:0px;--ty:-130px;--rot:-45deg;animation-delay:.15s"  src="/logo-sec0.png" alt="">
+      <img class="i-sec" style="--tx:124px;--ty:-40px;--rot:40deg;animation-delay:.30s"   src="/logo-sec1.png" alt="">
+      <img class="i-sec" style="--tx:77px;--ty:105px;--rot:-35deg;animation-delay:.45s"   src="/logo-sec2.png" alt="">
+      <img class="i-sec" style="--tx:-77px;--ty:105px;--rot:35deg;animation-delay:.60s"   src="/logo-sec3.png" alt="">
+      <img class="i-sec" style="--tx:-124px;--ty:-40px;--rot:-40deg;animation-delay:.75s" src="/logo-sec4.png" alt="">
+      <span class="i-sheen"></span>
     </div>
-    <div class="i-word">NOVA LAB</div>
+    <div class="i-word" aria-label="NOVA LAB">
+      <span style="animation-delay:1.55s">N</span><span style="animation-delay:1.63s">O</span><span style="animation-delay:1.71s">V</span><span style="animation-delay:1.79s">A</span><span class="sp">&nbsp;</span><span style="animation-delay:1.91s">L</span><span style="animation-delay:1.99s">A</span><span style="animation-delay:2.07s">B</span>
+    </div>
     <div class="i-tag">L'innovation prend vie</div>
   </div>
   <button class="skip" id="intro-skip" type="button">Passer l'intro ▸</button>
