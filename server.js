@@ -44,17 +44,53 @@ const pool = process.env.DATABASE_URL
     })
   : null;
 
-// Envoi d'email : actif si EMAIL_USER + EMAIL_PASS sont configurés (Gmail).
-// À chaque message reçu, une notification part vers EMAIL_TO (ta boîte).
-let mailer = null;
-if(process.env.EMAIL_USER && process.env.EMAIL_PASS){
+// Envoi d'email de notification à chaque message du formulaire.
+// PRIORITÉ à l'API HTTPS Brevo : les hébergeurs gratuits (Render, etc.)
+// BLOQUENT le SMTP → l'API HTTPS (port 443) est le seul moyen fiable.
+// Repli SMTP Gmail uniquement en local (si Brevo n'est pas configuré).
+const BREVO_KEY = process.env.BREVO_API_KEY || null;
+const MAIL_TO = process.env.EMAIL_TO || 'labnova48@gmail.com';
+// Expéditeur : doit être un expéditeur VALIDÉ dans ton compte Brevo.
+const MAIL_FROM = process.env.BREVO_SENDER || process.env.EMAIL_USER || MAIL_TO;
+
+let smtp = null;
+if(!BREVO_KEY && process.env.EMAIL_USER && process.env.EMAIL_PASS){
   const nodemailer = require('nodemailer');
-  mailer = nodemailer.createTransport({
+  smtp = nodemailer.createTransport({
     service: 'gmail',
     auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
   });
 }
-const MAIL_TO = process.env.EMAIL_TO || 'labnova48@gmail.com';
+const EMAIL_MODE = BREVO_KEY ? 'Brevo(API)' : (smtp ? 'SMTP' : 'inactif');
+
+// Envoie la notification via Brevo (HTTPS) ou, à défaut, via SMTP local.
+async function sendNotification(m){
+  const subject = `Nouveau projet — ${m.need || 'Contact'} (${m.name})`;
+  const text = `Nouveau message depuis le site Nova Lab\n\n`
+    + `Nom : ${m.name}\nEmail : ${m.email}\nBesoin : ${m.need || '-'}\n\n`
+    + `Message :\n${m.message || '-'}`;
+  if(BREVO_KEY){
+    const r = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'api-key': BREVO_KEY, 'content-type': 'application/json', 'accept': 'application/json' },
+      body: JSON.stringify({
+        sender: { email: MAIL_FROM, name: 'Nova Lab — Site' },
+        to: [{ email: MAIL_TO }],
+        replyTo: { email: m.email },
+        subject,
+        textContent: text
+      })
+    });
+    if(!r.ok) throw new Error('Brevo ' + r.status + ' : ' + (await r.text()).slice(0, 200));
+    return;
+  }
+  if(smtp){
+    await smtp.sendMail({
+      from: `"Nova Lab — Site" <${process.env.EMAIL_USER}>`,
+      to: MAIL_TO, replyTo: m.email, subject, text
+    });
+  }
+}
 
 async function initDb(){
   if(!pool) return;
@@ -94,16 +130,9 @@ app.post('/api/contact', async (req, res) => {
       console.log('Message reçu (aucune base configurée) :', clean);
     }
     // Notification email (ne bloque pas la réponse au visiteur si l'envoi échoue)
-    if(mailer){
-      mailer.sendMail({
-        from: `"Nova Lab — Site" <${process.env.EMAIL_USER}>`,
-        to: MAIL_TO,
-        replyTo: clean.email,                       // répondre = répondre au client
-        subject: `Nouveau projet — ${clean.need || 'Contact'} (${clean.name})`,
-        text: `Nouveau message depuis le site Nova Lab\n\n`
-            + `Nom : ${clean.name}\nEmail : ${clean.email}\nBesoin : ${clean.need || '-'}\n\n`
-            + `Message :\n${clean.message || '-'}`
-      }).then(() => console.log('Email envoyé ✅ à', MAIL_TO))
+    if(BREVO_KEY || smtp){
+      sendNotification(clean)
+        .then(() => console.log('Email envoyé ✅ à', MAIL_TO))
         .catch(err => console.error('Envoi email échoué ❌ :', err && err.message ? err.message : err));
     }
     res.json({ ok: true });
@@ -187,5 +216,5 @@ const port = process.env.PORT || 3000;
 initDb()
   .catch(err => console.error('Initialisation de la base échouée :', err))
   .finally(() => {
-    app.listen(port, () => console.log(`NOVA LAB en ligne sur le port ${port} (base : ${pool ? 'PostgreSQL' : 'aucune'}, IA : ${process.env.ANTHROPIC_API_KEY ? 'active' : 'inactive'}, email : ${mailer ? 'actif' : 'inactif'})`));
+    app.listen(port, () => console.log(`NOVA LAB en ligne sur le port ${port} (base : ${pool ? 'PostgreSQL' : 'aucune'}, IA : ${process.env.ANTHROPIC_API_KEY ? 'active' : 'inactive'}, email : ${EMAIL_MODE})`));
   });
