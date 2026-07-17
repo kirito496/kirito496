@@ -103,7 +103,8 @@ app.post('/api/contact', async (req, res) => {
         text: `Nouveau message depuis le site Nova Lab\n\n`
             + `Nom : ${clean.name}\nEmail : ${clean.email}\nBesoin : ${clean.need || '-'}\n\n`
             + `Message :\n${clean.message || '-'}`
-      }).catch(err => console.error('Envoi email échoué :', err));
+      }).then(() => console.log('Email envoyé ✅ à', MAIL_TO))
+        .catch(err => console.error('Envoi email échoué ❌ :', err && err.message ? err.message : err));
     }
     res.json({ ok: true });
   }catch(err){
